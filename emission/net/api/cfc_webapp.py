@@ -50,7 +50,8 @@ import emission.storage.timeseries.tcquery as esttc
 import emission.storage.timeseries.aggregate_timeseries as estag
 import emission.storage.timeseries.cache_series as esdc
 import emission.core.timer as ect
-import emission.core.get_database as edb
+
+from tracemob.api import api_get_traces
 
 try:
     config_file = open('conf/net/api/webserver.conf')
@@ -443,6 +444,13 @@ def getUUID(request, inHeader=False):
         abort(401, e.message)
 
 # Auth helpers END
+
+# # TRACEMOB API
+# @get('/tracemob/api/traces')
+# def tracemob_api_traces():
+#   data = dict(request.query.decode())
+#   return api_get_traces(data)
+# # ============
 
 if __name__ == '__main__':
     try:
