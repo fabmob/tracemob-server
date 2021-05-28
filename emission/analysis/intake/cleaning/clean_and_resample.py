@@ -530,32 +530,32 @@ def get_overriden_mode(raw_section_data, filtered_section_data, with_speeds_df):
     return None
 
 def is_air_section(filtered_section_data,with_speeds_df):
-    HUNDRED_KMPH = old_div(float(100 * 1000), (60 * 60)) # m/s
-    ONE_FIFTY_KMPH = old_div(float(150 * 1000), (60 * 60)) # m/s
+    THREE_HUNDRED_KMPH = old_div(float(300 * 1000), (60 * 60)) # m/s
+    FOUR_HUNDRED_KMPH = old_div(float(400 * 1000), (60 * 60)) # m/s
     end_to_end_distance = filtered_section_data.distance
     end_to_end_time = filtered_section_data.duration
     end_to_end_speed = old_div(end_to_end_distance, end_to_end_time)
     logging.debug("air check: end_to_end_distance = %s, end_to_end_time = %s, so end_to_end_speed = %s" %
                   (end_to_end_distance, end_to_end_time, end_to_end_speed))
-    if end_to_end_speed > ONE_FIFTY_KMPH:
-        logging.debug("air check: end_to_end_speed %s > ONE_FIFTY_KMPH %s, returning True " %
-                      (end_to_end_speed, ONE_FIFTY_KMPH))
+    if end_to_end_speed > FOUR_HUNDRED_KMPH:
+        logging.debug("air check: end_to_end_speed %s > FOUR_HUNDRED_KMPH %s, returning True " %
+                      (end_to_end_speed, FOUR_HUNDRED_KMPH))
         return True
 
     logging.debug("first check failed, speed distribution is %s" %
-                  with_speeds_df.speed.describe(percentiles=[0.9,0.95,0.97,0.99]))
+                  with_speeds_df.speed.describe(percentiles=[0.7,0.9,0.95,0.97,0.99]))
 
-    if end_to_end_speed > HUNDRED_KMPH and \
-        with_speeds_df.speed.quantile(0.9) > ONE_FIFTY_KMPH:
-        logging.debug("air check: end_to_end_speed %s > HUNDRED_KMPH %s, and 0.9 percentile %s > ONE_FIFTY_KMPH %s, returning True " %
-                      (end_to_end_speed, HUNDRED_KMPH,
-                       with_speeds_df.speed.quantile(0.9), ONE_FIFTY_KMPH))
+    if end_to_end_speed > THREE_HUNDRED_KMPH and \
+        with_speeds_df.speed.quantile(0.7) > FOUR_HUNDRED_KMPH:
+        logging.debug("air check: end_to_end_speed %s > THREE_HUNDRED_KMPH %s, and 70 percentile %s > FOUR_HUNDRED_KMPH %s, returning True " %
+                      (end_to_end_speed, THREE_HUNDRED_KMPH,
+                       with_speeds_df.speed.quantile(0.7), FOUR_HUNDRED_KMPH))
         return True
 
-    logging.debug("air check: end_to_end_speed %s < HUNDRED_KMPH %s or"
-                  "0.9 percentile %s < ONE_FIFTY_KMPH %s, returning False" %
-                  (end_to_end_speed, HUNDRED_KMPH,
-                   with_speeds_df.speed.quantile(0.9), ONE_FIFTY_KMPH))
+    logging.debug("air check: end_to_end_speed %s < _THREE_HUNDRED_KMPH %s or"
+                  "70 percentile %s < FOUR_HUNDRED_KMPH %s, returning False" %
+                  (end_to_end_speed, THREE_HUNDRED_KMPH,
+                   with_speeds_df.speed.quantile(0.7), FOUR_HUNDRED_KMPH))
     return False
 
 def _add_start_point(filtered_loc_df, raw_start_place, ts, sensed_mode):
