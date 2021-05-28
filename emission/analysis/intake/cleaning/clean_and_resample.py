@@ -508,13 +508,14 @@ def get_overriden_mode(raw_section_data, filtered_section_data, with_speeds_df):
         return ecwm.MotionTypes.AIR_OR_HSR
 
     overall_speed = old_div(end_to_end_distance, end_to_end_time)
-    TEN_KMPH = old_div(float(10 * 1000), (60 * 60)) # m/s
-    TWENTY_KMPH = old_div(float(20 * 1000), (60 * 60)) # m/s
+    TEN_KMPH = old_div(float(16 * 1000), (60 * 60)) # m/s
+    TWENTY_KMPH = old_div(float(33 * 1000), (60 * 60)) # m/s
     logging.debug("end_to_end_distance = %s, end_to_end_time = %s, overall_speed = %s" %
                   (end_to_end_distance, end_to_end_time, overall_speed))
 
     # Hardcoded hack as per
     # https://github.com/e-mission/e-mission-server/issues/407#issuecomment-248524098
+    # threshold modified by PatGendre May 28, 2021 : see values of TEN_KMPH and TWENTY_KPMH
     if raw_section_data.sensed_mode == ecwm.MotionTypes.ON_FOOT:
         if end_to_end_distance > 10 * 1000 and overall_speed > TEN_KMPH:
             logging.info("Sanity checking failed for ON_FOOT section from trip (raw: %s, filtered %s), returning UNKNOWN" % 
