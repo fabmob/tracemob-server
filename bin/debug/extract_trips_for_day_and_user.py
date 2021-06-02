@@ -19,7 +19,7 @@ import emission.core.get_database as edb
 
 def export_timeline(user_id_str, start_day_str, end_day_str, file_name):
     logging.info("Extracting trips for user %s day %s -> %s and saving to file %s" %
-                 (user_id_str, start_day_str, end_day_str, file))
+                 (user_id_str, start_day_str, end_day_str, file_name))
 
     # day_dt = pydt.datetime.strptime(day_str, "%Y-%m-%d").date()
     start_day_dt = pydt.datetime.strptime(start_day_str, "%Y-%m-%d")
