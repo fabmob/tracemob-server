@@ -51,8 +51,6 @@ import emission.storage.timeseries.aggregate_timeseries as estag
 import emission.storage.timeseries.cache_series as esdc
 import emission.core.timer as ect
 
-from tracemob.api import api_get_traces
-
 try:
     config_file = open('conf/net/api/webserver.conf')
 except:
@@ -145,7 +143,7 @@ def _fill_aggregate_backward_compat(request):
     # no aggregate if there is a user
     request.json["aggregate"] = ('user' not in request.json)
 
-@post("/result/heatmap/pop.route/<time_type>")
+# @post("/result/heatmap/pop.route/<time_type>")
 def getPopRoute(time_type):
   _fill_aggregate_backward_compat(request)
   user_uuid = get_user_or_aggregate_auth(request)
@@ -169,7 +167,7 @@ def getPopRoute(time_type):
   retVal = viz_fn(user_uuid, modes, start_time, end_time, region)
   return retVal
 
-@post("/result/heatmap/incidents/<time_type>")
+# @post("/result/heatmap/incidents/<time_type>")
 def getStressMap(time_type):
     _fill_aggregate_backward_compat(request)
     user_uuid = get_user_or_aggregate_auth(request)
@@ -510,12 +508,14 @@ def getUUID(request, inHeader=False):
 
 # Auth helpers END
 
-# # TRACEMOB API
-# @get('/tracemob/api/traces')
-# def tracemob_api_traces():
-#   data = dict(request.query.decode())
-#   return api_get_traces(data)
-# # ============
+# TRACEMOB API
+@post('/tracemob/checkuuid')
+def tracemob_check_uuid():
+    try:
+        uuid = enaa.getUUID(request, auth_method, False)
+    except:
+        return { 'success': False, 'error': True }
+    return { 'success': uuid is not None, 'error': False }
 
 if __name__ == '__main__':
     try:
